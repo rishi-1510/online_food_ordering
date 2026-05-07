@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="logo">Food<span>Rush</span></span>
+  <ul class="nav-links">
+    <li><a href="/home">🏠 Home</a></li>
+    <li><a href="/menu">🍽️ Menu</a></li>
+    <li><a href="/cart">🛒 Cart</a></li>
+    <li><a href="/orders" class="active">📦 Orders</a></li>
+    <li><a href="/logout">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <div class="page-header">
+    <h1>My <span>Orders</span></h1>
+    <p>All your placed orders are listed below</p>
+  </div>
+
+  {% if orders %}
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Item</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td><strong>#{{ order.id }}</strong></td>
+            <td>{{ order.item_name }}</td>
+            <td><span class="status-paid">{{ order.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px; color:#7a7060; font-size:0.88rem;">
+      Total: <strong>{{ orders|length }}</strong> order(s) placed.
+    </p>
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">📦</div>
+      <h3>No orders yet</h3>
+      <p>You haven't placed any orders. Browse the menu to get started!</p>
+      <a href="/menu" class="btn btn-primary" style="margin-top:16px;">🍽️ Browse Menu</a>
+    </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

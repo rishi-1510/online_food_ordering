@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<div style="padding: 16px 40px; background: #1e1b17; display:flex; align-items:center;">
+  <span style="font-size:1.3rem; font-weight:800; color:#fff;">Food<span style="color:#f5a623;">Rush</span></span>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages" style="max-width:480px; margin:16px auto 0;">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container-sm">
+  <div class="auth-card">
+    <div class="auth-logo">Create Account</div>
+    <p class="auth-subtitle">Register to start ordering delicious food</p>
+
+    <form method="POST" action="/register">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Choose a username" required autofocus/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Choose a password" required/>
+      </div>
+      <div class="form-group">
+        <label>Register As</label>
+        <select name="role">
+          <option value="user">👤 User (Order food)</option>
+          <option value="admin">🛠️ Admin (Manage menu)</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Create Account →</button>
+    </form>
+
+    <p style="text-align:center; margin-top:20px; font-size:0.88rem; color:#7a7060;">
+      Already registered? <a href="/login">Login here</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

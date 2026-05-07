@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="logo">Food<span>Rush</span></span>
+  <ul class="nav-links">
+    <li><a href="/home">🏠 Home</a></li>
+    <li><a href="/menu">🍽️ Menu</a></li>
+    <li><a href="/cart">🛒 Cart</a></li>
+    <li><a href="/orders">📦 Orders</a></li>
+    <li><a href="/logout">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <div class="payment-card">
+    <div class="pay-icon">💳</div>
+    <h2>Confirm Payment</h2>
+    <p style="color:#7a7060; font-size:0.9rem;">Review your order and click Pay Now to confirm.</p>
+
+    <div class="total-display">₹{{ "%.0f"|format(total) }}</div>
+
+    <div class="order-summary">
+      <h4>Order Summary</h4>
+      {% for item in cart %}
+        <div class="order-item">
+          <span>{{ item.name }}</span>
+          <span>₹{{ "%.0f"|format(item.price) }}</span>
+        </div>
+      {% endfor %}
+      <div class="order-item" style="font-weight:700; border-bottom:none; margin-top:4px;">
+        <span>Total</span>
+        <span style="color:#e05c2a;">₹{{ "%.0f"|format(total) }}</span>
+      </div>
+    </div>
+
+    <!-- Payment method (simulation) -->
+    <div style="background:#f7f3ee; border-radius:12px; padding:16px; margin-bottom:20px; text-align:left;">
+      <p style="font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:#7a7060; margin-bottom:10px;">Payment Method</p>
+      <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.92rem;">
+        <input type="radio" name="payment" checked/> 💳 Credit / Debit Card
+      </label>
+      <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.92rem; margin-top:8px;">
+        <input type="radio" name="payment"/> 📱 UPI
+      </label>
+      <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:0.92rem; margin-top:8px;">
+        <input type="radio" name="payment"/> 💵 Cash on Delivery
+      </label>
+    </div>
+
+    <form method="POST" action="/pay">
+      <button type="submit" class="btn btn-success btn-full" style="font-size:1.05rem;">
+        🔒 Pay Now — ₹{{ "%.0f"|format(total) }}
+      </button>
+    </form>
+
+    <a href="/cart" style="display:block; text-align:center; margin-top:14px; font-size:0.88rem; color:#7a7060;">
+      ← Back to Cart
+    </a>
+
+    <p style="font-size:0.75rem; color:#aaa; margin-top:14px; text-align:center;">
+      🔒 This is a simulated payment for demonstration purposes.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

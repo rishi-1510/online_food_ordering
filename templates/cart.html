@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="logo">Food<span>Rush</span></span>
+  <ul class="nav-links">
+    <li><a href="/home">🏠 Home</a></li>
+    <li><a href="/menu">🍽️ Menu</a></li>
+    <li><a href="/cart" class="active">🛒 Cart</a></li>
+    <li><a href="/orders">📦 Orders</a></li>
+    <li><a href="/logout">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <div class="page-header">
+    <h1>Your <span>Cart</span></h1>
+    <p>Review your items before checkout</p>
+  </div>
+
+  {% if cart %}
+    <div class="card">
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><strong>{{ item.name }}</strong></td>
+            <td>₹{{ "%.0f"|format(item.price) }}</td>
+            <td>
+              <a href="/remove_from_cart/{{ loop.index0 }}"
+                 class="btn btn-danger btn-sm"
+                 onclick="return confirm('Remove {{ item.name }}?')">Remove</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-total-row">
+        <div>
+          {{ cart|length }} item(s) &nbsp;|&nbsp;
+          <a href="/clear_cart" class="btn btn-outline btn-sm"
+             onclick="return confirm('Clear entire cart?')">🗑️ Clear Cart</a>
+        </div>
+        <div>Total: <span class="amount">₹{{ "%.0f"|format(total) }}</span></div>
+      </div>
+
+      <div style="text-align:right; margin-top:16px;">
+        <a href="/menu" class="btn btn-outline" style="margin-right:10px;">← Continue Shopping</a>
+        <a href="/checkout" class="btn btn-success">Proceed to Checkout →</a>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">🛒</div>
+      <h3>Your cart is empty</h3>
+      <p>Browse the menu and add some delicious items!</p>
+      <a href="/menu" class="btn btn-primary" style="margin-top:16px;">🍽️ Browse Menu</a>
+    </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

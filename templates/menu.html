@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <span class="logo">Food<span>Rush</span></span>
+  <ul class="nav-links">
+    <li><a href="/home">🏠 Home</a></li>
+    <li><a href="/menu" class="active">🍽️ Menu</a></li>
+    <li><a href="/cart">🛒 Cart <span class="cart-badge">{{ cart_count }}</span></a></li>
+    <li><a href="/orders">📦 Orders</a></li>
+    <li><a href="/logout">🚪 Logout</a></li>
+  </ul>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <div class="page-header">
+    <h1>Our <span>Food</span> Menu</h1>
+    <p>Browse and add your favourite items to the cart</p>
+  </div>
+
+  <!-- SEARCH -->
+  <form method="GET" action="/menu">
+    <div class="search-bar">
+      <input type="text" name="search" value="{{ search }}" placeholder="🔍  Search food items by name..."/>
+      <button type="submit" class="btn btn-primary">Search</button>
+      {% if search %}
+        <a href="/menu" class="btn btn-outline">✕ Clear</a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% if search %}
+    <p style="margin-bottom:20px; color:#7a7060; font-size:0.9rem;">
+      Showing results for "<strong>{{ search }}</strong>" — {{ items|length }} item(s) found
+    </p>
+  {% endif %}
+
+  <!-- FOOD GRID -->
+  {% if items %}
+    <div class="food-grid">
+      {% for item in items %}
+      <div class="food-card">
+        {% if item.image %}
+          <img src="{{ item.image }}" alt="{{ item.name }}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"/>
+          <div class="food-img-placeholder" style="display:none;">🍽️</div>
+        {% else %}
+          <div class="food-img-placeholder">🍽️</div>
+        {% endif %}
+        <div class="food-body">
+          {% if item.category %}
+            <span class="food-cat">{{ item.category }}</span>
+          {% endif %}
+          <div class="food-name">{{ item.name }}</div>
+          <div class="food-footer">
+            <span class="food-price">₹{{ "%.0f"|format(item.price) }}</span>
+            <a href="/add_to_cart/{{ item.id }}" class="btn btn-primary btn-sm">+ Add</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="no-items">
+      <div class="icon">🔍</div>
+      <p>No food items found{% if search %} for "{{ search }}"{% endif %}.</p>
+    </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

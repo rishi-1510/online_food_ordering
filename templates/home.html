@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <span class="logo">Food<span>Rush</span></span>
+  <ul class="nav-links">
+    <li><a href="/home" class="active">🏠 Home</a></li>
+    <li><a href="/menu">🍽️ Menu</a></li>
+    <li><a href="/cart">🛒 Cart</a></li>
+    <li><a href="/orders">📦 Orders</a></li>
+    {% if role == 'admin' %}
+      <li><a href="/admin">⚙️ Admin</a></li>
+    {% endif %}
+    <li><a href="/logout">🚪 Logout</a></li>
+  </ul>
+  <span class="nav-user">Logged in as <b>{{ username }}</b> ({{ role }})</span>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+
+  <!-- WELCOME BANNER -->
+  <div class="welcome-banner">
+    <div>
+      <h1>Welcome back, <span>{{ username }}</span>! 👋</h1>
+      <p>{{ "You have admin privileges. Manage the food menu from the Admin panel." if role == 'admin' else "Browse the menu, add items to cart, and place your order!" }}</p>
+    </div>
+    {% if role == 'admin' %}
+      <a href="/admin" class="btn btn-secondary">⚙️ Go to Admin Panel</a>
+    {% else %}
+      <a href="/menu" class="btn btn-secondary">🍽️ Browse Menu</a>
+    {% endif %}
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="home-cards">
+    <div class="home-card">
+      <div class="icon">🍽️</div>
+      <h3>Browse Menu</h3>
+      <p>View all available food items and add them to your cart.</p>
+      <a href="/menu" class="btn btn-primary btn-sm">View Menu</a>
+    </div>
+
+    <div class="home-card">
+      <div class="icon">🛒</div>
+      <h3>My Cart</h3>
+      <p>Review your cart and proceed to checkout when ready.</p>
+      <a href="/cart" class="btn btn-outline btn-sm">Open Cart</a>
+    </div>
+
+    <div class="home-card">
+      <div class="icon">📦</div>
+      <h3>My Orders</h3>
+      <p>Track all your past and current orders.</p>
+      <a href="/orders" class="btn btn-outline btn-sm">View Orders</a>
+    </div>
+
+    {% if role == 'admin' %}
+    <div class="home-card">
+      <div class="icon">⚙️</div>
+      <h3>Admin Panel</h3>
+      <p>Add, update or remove food items from the menu.</p>
+      <a href="/admin" class="btn btn-dark btn-sm">Manage Menu</a>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — FoodRush</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<div style="padding: 16px 40px; background: #1e1b17; display:flex; align-items:center;">
+  <span style="font-size:1.3rem; font-weight:800; color:#fff;">Food<span style="color:#f5a623;">Rush</span></span>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-messages" style="max-width:480px; margin:16px auto 0;">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="container-sm">
+  <div class="auth-card">
+    <div class="auth-logo">Food<span>Rush</span></div>
+    <p class="auth-subtitle">Sign in to your account to continue</p>
+
+    <form method="POST" action="/login">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter your username" required autofocus/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Login →</button>
+    </form>
+
+    <p style="text-align:center; margin-top:20px; font-size:0.88rem; color:#7a7060;">
+      New here? <a href="/register">Create an account</a>
+    </p>
+
+    <div style="margin-top:24px; padding:14px; background:#f7f3ee; border-radius:10px; font-size:0.82rem; color:#7a7060; text-align:center;">
+      <strong>Demo Credentials</strong><br/>
+      Admin: <code>admin / admin123</code> &nbsp;|&nbsp; User: <code>user1 / user123</code>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
